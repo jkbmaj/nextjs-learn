@@ -1,3 +1,3 @@
 export const ProductName = ({ name }: { name: string }) => {
-	return name;
+	return <h3>{name}</h3>;
 };
