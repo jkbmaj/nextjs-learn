@@ -1,17 +1,27 @@
-import { ProductList } from "@/app/organisms/ProductList";
-import type { ProductItemType } from "@/app/ProductItemType";
+import { ProductList } from "@ui/organisms/ProductList";
 
-export default function Products() {
-	const products: ProductItemType[] = [
-		{ id: 1, name: "Koszulka", src: "#1", imageUrl: "/img1.jpeg" },
-		{ id: 2, name: "Buty", src: "#2", imageUrl: "/img2.jpeg" },
-		{ id: 3, name: "Spodnie", src: "#3", imageUrl: "/img3.jpeg" },
-		{ id: 4, name: "Plecak", src: "#4", imageUrl: "/img4.jpeg" },
-	];
+export default async function Products() {
+	const response = await fetch("https://www.ittools.pl/products_new.json");
+	const products = (await response.json()) as {
+		id: string;
+		title: string;
+		image: string;
+		price: number;
+	}[];
+
+	const productItems = products.map((product) => {
+		return {
+			id: product.id,
+			name: product.title,
+			src: "/products/" + product.id,
+			imageUrl: product.image,
+			price: product.price,
+		};
+	});
 
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-between p-24">
-			<ProductList products={products} />
+			<ProductList products={productItems} />
 		</main>
 	);
 }
